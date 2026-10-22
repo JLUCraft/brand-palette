@@ -31,8 +31,10 @@
   --accent: #3e6da9;
   --focus: #3e6da9;
   --success: #03642c;
+  --on-success: #ffffff;
   --success-bg: #e6feea;
   --error: #932421;
+  --on-error: #ffffff;
   --error-bg: #fff4f2;
   --font-sans: system-ui, -apple-system, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -48,15 +50,22 @@
   --radius-pill: 999px;
   --space-2: 2px;
   --space-4: 4px;
+  --space-6: 6px;
   --space-8: 8px;
+  --space-10: 10px;
   --space-12: 12px;
+  --space-14: 14px;
   --space-16: 16px;
+  --space-18: 18px;
+  --space-20: 20px;
   --space-24: 24px;
   --space-32: 32px;
+  --space-40: 40px;
   --space-48: 48px;
   --space-64: 64px;
   --touch-target: 44px;
   --focus-ring: 3px;
+  --focus-ring-offset: 2px;
   --content-max: 880px;
   --page-max: 1120px;
 }
@@ -79,8 +88,10 @@
     --accent: #a3c7f7;
     --focus: #76a7e8;
     --success: #98d6a4;
+    --on-success: #151618;
     --success-bg: #003111;
     --error: #ffaba1;
+    --on-error: #151618;
     --error-bg: #4d0b0a;
   }
 }

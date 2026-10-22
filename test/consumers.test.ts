@@ -5,10 +5,12 @@ import { join } from "node:path";
 import test from "node:test";
 
 import { buildBrand, type Brand } from "../src/brand";
+import { toTokensCss } from "../src/emit";
 import { main } from "../src/cli";
 import { toChakraTheme } from "../src/emit-chakra";
 import { composeContrastFailures, toComposeTheme } from "../src/emit-compose";
 import { extractPalette } from "../src/extract";
+import { solidImage } from "../src/seed";
 import { encodePng } from "../src/icons";
 
 const SLOT_NAMES = [
@@ -112,6 +114,20 @@ test("Compose 配色不产生不可读的按钮组合", () => {
     const failures = composeContrastFailures(brandFrom(colors));
     assert.deepEqual(failures, [], `配色 ${JSON.stringify(colors)} 有不可读组合`);
   }
+});
+
+test("工具自身界面的令牌与生成器一致（不是手工副本）", () => {
+  const seed = solidImage("#16457e");
+  const brand = buildBrand({
+    id: "jlucraft-tool",
+    name: "校徽取色工具",
+    extracted: extractPalette(seed.rgba, seed.width, seed.height),
+  });
+  const committed = readFileSync(
+    join(import.meta.dirname, "..", "web", "tokens.css"),
+    "utf8"
+  );
+  assert.equal(committed, toTokensCss(brand), "web/tokens.css 过期：重跑 bun run seed-tokens");
 });
 
 test("CLI 可以把生成物直接写到消费端路径", () => {
