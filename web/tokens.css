@@ -1,0 +1,86 @@
+/* 生成文件，请勿手改。
+ * 来源：brands/jlucraft-tool/brand.json
+ * 生成器：brand-palette（bun run palette）
+ */
+:root {
+  --brand-50: #f2f7ff;
+  --brand-100: #e1eeff;
+  --brand-200: #c6dfff;
+  --brand-300: #a3c7f7;
+  --brand-400: #7ca7e0;
+  --brand-500: #5888c7;
+  --brand-600: #3e6da9;
+  --brand-700: #295388;
+  --brand-800: #1a3b64;
+  --brand-900: #0f2847;
+  --brand-950: #05162d;
+  --brand-base: #1a3b64;
+  --bg: #f6f7f8;
+  --surface: #ffffff;
+  --surface-alt: #ebedef;
+  --line: #dadce0;
+  --line-strong: #c1c4c8;
+  --ink: #26282a;
+  --muted: #505357;
+  --primary: #1a3b64;
+  --primary-hover: #0f2847;
+  --primary-text: #295388;
+  --on-primary: #ffffff;
+  --secondary: #5e6b8c;
+  --on-secondary: #ffffff;
+  --accent: #3e6da9;
+  --focus: #3e6da9;
+  --success: #03642c;
+  --success-bg: #e6feea;
+  --error: #932421;
+  --error-bg: #fff4f2;
+  --font-sans: system-ui, -apple-system, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-hero: clamp(28px, 5vw, 44px);
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --touch-target: 44px;
+  --focus-ring: 3px;
+  --content-max: 880px;
+  --page-max: 1120px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #151618;
+    --surface: #26282a;
+    --surface-alt: #383b3e;
+    --line: #383b3e;
+    --line-strong: #505357;
+    --ink: #f4f7fa;
+    --muted: #c1c4c9;
+    --primary: #1a3b64;
+    --primary-hover: #295388;
+    --primary-text: #a3c7f7;
+    --on-primary: #ffffff;
+    --secondary: #97a4c3;
+    --on-secondary: #151618;
+    --accent: #a3c7f7;
+    --focus: #76a7e8;
+    --success: #98d6a4;
+    --success-bg: #003111;
+    --error: #ffaba1;
+    --error-bg: #4d0b0a;
+  }
+}
