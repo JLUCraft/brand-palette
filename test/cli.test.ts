@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -95,4 +95,32 @@ test("非 PNG 输入返回 1 并提示只能读 PNG", () => {
   writeFileSync(bogus, "not really a png");
   assert.equal(main([bogus, "--id", "jlu", "--name", "x"]), 1);
   rmSync(dir, { recursive: true, force: true });
+});
+
+
+test("committed palette regenerates consumers without the source image", () => {
+  const dir = tempDir();
+  try {
+    const emblem = join(dir, "emblem.png");
+    const out = join(dir, "brand");
+    const chakra = join(dir, "theme.ts");
+    const compose = join(dir, "Colors.kt");
+    const css = join(dir, "consumer.css");
+    writeEmblem(emblem);
+    assert.equal(main([emblem, "--id", "second-school", "--name", "Second School", "--out", out,
+      "--chakra", chakra, "--compose", compose, "--css", css]), 0);
+    const expected = [chakra, compose, css].map((path) => readFileSync(path, "utf8"));
+    unlinkSync(emblem);
+    const args = ["--brand", join(out, "brand.json"), "--chakra", chakra, "--compose", compose, "--css", css];
+    assert.equal(main([...args, "--check"]), 0);
+    for (const path of [chakra, compose, css]) unlinkSync(path);
+    assert.equal(main(args), 0);
+    assert.deepEqual([chakra, compose, css].map((path) => readFileSync(path, "utf8")), expected);
+    writeFileSync(compose, "// changed\n");
+    assert.equal(main([...args, "--check"]), 1);
+    assert.equal(readFileSync(compose, "utf8"), "// changed\n");
+    assert.equal(main([...args, "--icons"]), 2);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

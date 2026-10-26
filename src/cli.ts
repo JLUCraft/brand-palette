@@ -2,7 +2,7 @@
 /**
  * 用法：
  *   bun run palette path/to/emblem.png --id jlu --name 吉林大学 [--out brands/jlu] [--icons]
- *   bun run palette path/to/emblem.png --id jlu --name 吉林大学 --out brands/jlu --check
+ *   bun run palette --brand brands/jlu/brand.json --chakra ../FollyLauncher/src/styles/brand-theme.gen.ts --check
  *
  * `--check` 不写盘，只比较已提交的生成物是否与当前算法一致；CI 用它防止漂移。
  */
@@ -11,14 +11,17 @@ import { readFileSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 
 import { buildBrand, type Brand } from "./brand";
-import { artifacts } from "./emit";
+import { artifacts, toBrandJson } from "./emit";
+import { brandFromManifest } from "./manifest";
 import { toChakraTheme } from "./emit-chakra";
 import { composeContrastFailures, toComposeTheme } from "./emit-compose";
 import { decodePng, iconSet } from "./icons";
 import { DEFAULT_EXTRACT, extractPalette, EmblemError } from "./extract";
 
 interface Args {
-  image: string;
+  image?: string;
+  brand?: string;
+  css?: string;
   id: string;
   name: string;
   out: string;
@@ -49,11 +52,13 @@ function parseArgs(argv: string[]): Args {
   }
 
   const image = positional[0];
-  const id = flags.get("id");
-  const name = flags.get("name");
-  if (!image || typeof id !== "string" || typeof name !== "string") {
+  const brand = flags.get("brand");
+  const manifest = typeof brand === "string" ? JSON.parse(readFileSync(brand, "utf8")) : undefined;
+  const id = manifest?.id ?? flags.get("id");
+  const name = manifest?.name ?? flags.get("name");
+  if ((image && manifest) || (!image && !manifest) || typeof id !== "string" || typeof name !== "string") {
     throw new Error(
-      "用法：bun run palette <emblem.png> --id <品牌 id> --name <显示名> [--out <目录>] [--icons] [--check]"
+      "Usage: bun run palette <emblem.png> --id <id> --name <name>, or bun run palette --brand <brand.json> [--out <directory>] [--css <path>] [--chakra <path>] [--compose <path>] [--check]"
     );
   }
   if (!/^[a-z][a-z0-9-]*$/.test(id)) {
@@ -63,11 +68,15 @@ function parseArgs(argv: string[]): Args {
   const out = flags.get("out");
   const chakra = flags.get("chakra");
   const compose = flags.get("compose");
+  const css = flags.get("css");
+  if (manifest && flags.has("icons")) throw new Error("--icons requires an emblem image");
   return {
     image,
+    ...(typeof brand === "string" ? { brand } : {}),
+    ...(typeof css === "string" ? { css } : {}),
     id,
     name,
-    out: typeof out === "string" ? out : join("brands", id),
+    out: typeof out === "string" ? out : typeof brand === "string" ? dirname(brand) : join("brands", id),
     check: flags.has("check"),
     icons: flags.has("icons"),
     ...(typeof chakra === "string" ? { chakra } : {}),
@@ -111,12 +120,13 @@ function targets(brand: Brand, args: Args): Map<string, string> {
   for (const [name, content] of Object.entries(artifacts(brand))) {
     files.set(resolve(args.out, name), content);
   }
+  if (args.css) files.set(resolve(args.css), artifacts(brand)["tokens.css"]);
   if (args.chakra) files.set(resolve(args.chakra), toChakraTheme(brand));
   if (args.compose) files.set(resolve(args.compose), toComposeTheme(brand));
   return files;
 }
 
-function runCheck(files: Map<string, string>): boolean {
+export function runCheck(files: Map<string, string>): boolean {
   let ok = true;
   for (const [path, expected] of files) {
     if (!existsSync(path)) {
@@ -144,10 +154,14 @@ export function main(argv: string[]): number {
   let brand: Brand;
   let image;
   try {
-    const buffer = readFileSync(args.image);
-    image = decodePng(buffer);
-    const extracted = extractPalette(image.rgba, image.width, image.height, DEFAULT_EXTRACT);
-    brand = buildBrand({ id: args.id, name: args.name, extracted });
+    if (args.brand) {
+      brand = brandFromManifest(JSON.parse(readFileSync(args.brand, "utf8")));
+    } else {
+      const buffer = readFileSync(args.image!);
+      image = decodePng(buffer);
+      const extracted = extractPalette(image.rgba, image.width, image.height, DEFAULT_EXTRACT);
+      brand = brandFromManifest(toBrandJson(buildBrand({ id: args.id, name: args.name, extracted })));
+    }
   } catch (error) {
     if (error instanceof EmblemError) {
       console.error(`${error.message}（${error.code}）`);
@@ -186,7 +200,7 @@ export function main(argv: string[]): number {
     console.log(`写入 ${path}`);
   }
 
-  if (args.icons) {
+  if (args.icons && image) {
     const iconsDir = join(args.out, "icons");
     mkdirSync(iconsDir, { recursive: true });
     for (const [name, buffer] of Object.entries(iconSet(image))) {
