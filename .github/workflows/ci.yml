@@ -18,8 +18,34 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: workspace/brand-palette
     steps:
       - uses: actions/checkout@v7
+        with:
+          path: workspace/brand-palette
+
+      - uses: actions/checkout@v7
+        with:
+          repository: JLUCraft/federated-skinstation
+          path: workspace/federated-skinstation
+
+      - uses: actions/checkout@v7
+        with:
+          repository: JLUCraft/website
+          path: workspace/jlucraft-web
+
+      - uses: actions/checkout@v7
+        with:
+          repository: JLUCraft/FollyLauncher
+          ref: folly
+          path: workspace/FollyLauncher
+
+      - uses: actions/checkout@v7
+        with:
+          repository: JLUCraft/union-manager
+          path: workspace/union-manager
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
@@ -34,3 +60,6 @@ jobs:
 
       - name: Test
         run: bun run test
+
+      - name: Check generated brand consumers
+        run: bun run check:consumers
