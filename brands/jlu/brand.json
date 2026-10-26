@@ -133,6 +133,22 @@
         "met": true
       },
       {
+        "label": "正文 / 品牌浅底",
+        "fg": "#26282b",
+        "bg": "#f2f7ff",
+        "ratio": 13.74,
+        "min": 7,
+        "met": true
+      },
+      {
+        "label": "链接 / 品牌浅底",
+        "fg": "#234e9d",
+        "bg": "#f2f7ff",
+        "ratio": 7.37,
+        "min": 4.5,
+        "met": true
+      },
+      {
         "label": "主按钮文字 / 主按钮",
         "fg": "#ffffff",
         "bg": "#234e9d",
@@ -153,6 +169,14 @@
         "fg": "#3768c1",
         "bg": "#f5f7f9",
         "ratio": 5,
+        "min": 3,
+        "met": true
+      },
+      {
+        "label": "控件描边 / 卡片",
+        "fg": "#82868e",
+        "bg": "#ffffff",
+        "ratio": 3.65,
         "min": 3,
         "met": true
       },
@@ -239,6 +263,22 @@
         "met": true
       },
       {
+        "label": "正文 / 品牌浅底",
+        "fg": "#f4f7fc",
+        "bg": "#031336",
+        "ratio": 17,
+        "min": 7,
+        "met": true
+      },
+      {
+        "label": "链接 / 品牌浅底",
+        "fg": "#a4c5ff",
+        "bg": "#031336",
+        "ratio": 10.44,
+        "min": 4.5,
+        "met": true
+      },
+      {
         "label": "主按钮文字 / 主按钮",
         "fg": "#ffffff",
         "bg": "#234e9d",
@@ -259,6 +299,14 @@
         "fg": "#70a3ff",
         "bg": "#151619",
         "ratio": 7.21,
+        "min": 3,
+        "met": true
+      },
+      {
+        "label": "控件描边 / 卡片",
+        "fg": "#82868e",
+        "bg": "#26282b",
+        "ratio": 4.05,
         "min": 3,
         "met": true
       },

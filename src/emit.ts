@@ -115,6 +115,12 @@ ${declarations(LAYOUT_TOKENS, "  ")}
 ${declarations(brand.modes.dark.tokens, "    ")}
   }
 }
+
+/* 按 class 切模式的框架（VitePress 等）用这一段：值与上面的深色模式相同，
+   只是选择器从媒体查询换成 .dark，两者不冲突（class 声明在后，优先级相同）。 */
+.dark {
+${declarations(brand.modes.dark.tokens, "  ")}
+}
 `;
 }
 

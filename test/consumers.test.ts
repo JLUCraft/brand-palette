@@ -116,6 +116,15 @@ test("Compose 配色不产生不可读的按钮组合", () => {
   }
 });
 
+test("Compose dark primary uses the readable foreground token", () => {
+  const brand = brandFrom([[35, 78, 157]]);
+  const source = toComposeTheme(brand);
+  const dark = source.slice(source.indexOf("internal val BrandDarkColors"));
+  const primary = brand.modes.dark.tokens["primary-text"].slice(1).toUpperCase();
+  assert.ok(dark.includes(`primary = Color(0xFF${primary}),`));
+  assert.deepEqual(composeContrastFailures(brand), []);
+});
+
 test("工具自身界面的令牌与生成器一致（不是手工副本）", () => {
   const seed = solidImage("#16457e");
   const brand = buildBrand({

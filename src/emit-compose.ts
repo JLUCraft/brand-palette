@@ -69,6 +69,13 @@ function slots(brand: Brand, mode: "light" | "dark"): Record<Slot, string> {
   const accentRamp = brand.palette.accent.ramp;
   const neutralRamp = brand.palette.neutral.ramp;
 
+  const primary = t["primary-text"];
+  const onPrimary = onColor(
+    [rgbToHex(WHITE_RGB), neutralRamp[950]],
+    primary,
+    brand.palette.primary.hue
+  );
+
   const tertiary = accentRamp[dark ? 300 : 600];
   const onTertiary = onColor(
     [rgbToHex(WHITE_RGB), neutralRamp[dark ? 50 : 950]],
@@ -77,8 +84,8 @@ function slots(brand: Brand, mode: "light" | "dark"): Record<Slot, string> {
   );
 
   return {
-    primary: t.primary,
-    onPrimary: t["on-primary"],
+    primary,
+    onPrimary,
     primaryContainer: ramp[dark ? 800 : 100],
     onPrimaryContainer: ramp[dark ? 100 : 900],
     secondary: t.secondary,
@@ -149,6 +156,7 @@ export function composeContrastFailures(brand: Brand): string[] {
       ["error", "onError"],
       ["background", "onBackground"],
       ["surface", "onSurface"],
+      ["surface", "primary"],
     ];
     for (const [bgSlot, fgSlot] of pairs) {
       const ratio = contrastRatio(hexToRgb(values[fgSlot]), hexToRgb(values[bgSlot]));

@@ -302,12 +302,17 @@ function resolveSemantic(
     surface,
     "surface-alt": neutral.steps[dark ? 800 : 100],
     line: neutral.steps[dark ? 800 : 200],
-    "line-strong": neutral.steps[dark ? 700 : 300],
+    // 控件边界要满足 WCAG 1.4.11 的 3:1：neutral-500 在浅色卡片(3.65)与深色卡片(4.05)都达标。
+    "line-strong": neutral.steps[500],
     ink: ink.hex,
     muted: muted.hex,
     primary: primaryBase,
     "primary-hover": brand.steps[primary.hover],
     "primary-text": primaryText.hex,
+    // 品牌浅色底与描边：导航当前项、只读框这类「选中但非主操作」的表面，
+    // 不再借用属于状态反馈的 success-bg。
+    "primary-subtle": brand.steps[dark ? 950 : 50],
+    "primary-border": brand.steps[dark ? 800 : 200],
     "on-primary": onPrimaryHex,
     secondary: secondaryBase,
     "on-secondary": onSecondaryHex,
@@ -328,9 +333,15 @@ function resolveSemantic(
     check("次要文字 / 卡片", tokens.muted, tokens.surface, MIN_TEXT),
     check("链接 / 背景", tokens["primary-text"], bg, MIN_TEXT),
     check("链接 / 卡片", tokens["primary-text"], tokens.surface, MIN_TEXT),
+    check("正文 / 品牌浅底", tokens.ink, tokens["primary-subtle"], MIN_READABLE),
+    check("链接 / 品牌浅底", tokens["primary-text"], tokens["primary-subtle"], MIN_TEXT),
+    // primary-border 只用作品牌浅底上的装饰性描边（WCAG 1.4.11 豁免装饰元素）：
+    // 选中态由 primary-subtle 填充 + primary-text 文字共同表达，这两者已各自校验。
+
     check("主按钮文字 / 主按钮", tokens["on-primary"], tokens.primary, MIN_TEXT),
     check("次按钮文字 / 次按钮", tokens["on-secondary"], tokens.secondary, MIN_TEXT),
     check("焦点环 / 背景", tokens.focus, bg, MIN_GRAPHIC),
+    check("控件描边 / 卡片", tokens["line-strong"], tokens.surface, MIN_GRAPHIC),
     check("成功文字 / 成功底色", tokens.success, tokens["success-bg"], MIN_TEXT),
     check("错误文字 / 错误底色", tokens.error, tokens["error-bg"], MIN_TEXT),
     check("成功按钮文字 / 成功按钮", tokens["on-success"], tokens.success, MIN_TEXT),
@@ -370,6 +381,7 @@ export const LAYOUT_TOKENS: Record<string, string> = {
   "space-48": "48px",
   "space-64": "64px",
   "touch-target": "44px",
+  "control-sm": "36px",
   "focus-ring": "3px",
   "focus-ring-offset": "2px",
   "content-max": "880px",

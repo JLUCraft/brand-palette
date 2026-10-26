@@ -19,12 +19,14 @@
   --surface: #ffffff;
   --surface-alt: #ebedef;
   --line: #dadce0;
-  --line-strong: #c1c4c8;
+  --line-strong: #83868b;
   --ink: #26282a;
   --muted: #505357;
   --primary: #1a3b64;
   --primary-hover: #0f2847;
   --primary-text: #295388;
+  --primary-subtle: #f2f7ff;
+  --primary-border: #c6dfff;
   --on-primary: #ffffff;
   --secondary: #5e6b8c;
   --on-secondary: #ffffff;
@@ -64,6 +66,7 @@
   --space-48: 48px;
   --space-64: 64px;
   --touch-target: 44px;
+  --control-sm: 36px;
   --focus-ring: 3px;
   --focus-ring-offset: 2px;
   --content-max: 880px;
@@ -76,12 +79,14 @@
     --surface: #26282a;
     --surface-alt: #383b3e;
     --line: #383b3e;
-    --line-strong: #505357;
+    --line-strong: #83868b;
     --ink: #f4f7fa;
     --muted: #c1c4c9;
     --primary: #1a3b64;
     --primary-hover: #295388;
     --primary-text: #a3c7f7;
+    --primary-subtle: #05162d;
+    --primary-border: #1a3b64;
     --on-primary: #ffffff;
     --secondary: #97a4c3;
     --on-secondary: #151618;
@@ -94,4 +99,32 @@
     --on-error: #151618;
     --error-bg: #4d0b0a;
   }
+}
+
+/* 按 class 切模式的框架（VitePress 等）用这一段：值与上面的深色模式相同，
+   只是选择器从媒体查询换成 .dark，两者不冲突（class 声明在后，优先级相同）。 */
+.dark {
+  --bg: #151618;
+  --surface: #26282a;
+  --surface-alt: #383b3e;
+  --line: #383b3e;
+  --line-strong: #83868b;
+  --ink: #f4f7fa;
+  --muted: #c1c4c9;
+  --primary: #1a3b64;
+  --primary-hover: #295388;
+  --primary-text: #a3c7f7;
+  --primary-subtle: #05162d;
+  --primary-border: #1a3b64;
+  --on-primary: #ffffff;
+  --secondary: #97a4c3;
+  --on-secondary: #151618;
+  --accent: #a3c7f7;
+  --focus: #76a7e8;
+  --success: #98d6a4;
+  --on-success: #151618;
+  --success-bg: #003111;
+  --error: #ffaba1;
+  --on-error: #151618;
+  --error-bg: #4d0b0a;
 }

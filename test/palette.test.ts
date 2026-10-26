@@ -152,14 +152,17 @@ test("tokens.css 同时包含浅色与深色两块，且没有 undefined", () =>
   const css = toTokensCss(brand);
 
   assert.ok(css.includes("@media (prefers-color-scheme: dark)"));
+  assert.ok(css.includes(".dark {"), "缺少按 class 切模式的深色块");
   assert.ok(css.includes("--brand-500:"));
   assert.ok(css.includes("--touch-target: 44px"));
   assert.ok(!css.includes("undefined"));
   const lightBlock = css.slice(0, css.indexOf("@media"));
-  const darkBlock = css.slice(css.indexOf("@media"));
+  const darkMedia = css.slice(css.indexOf("@media"), css.indexOf(".dark {"));
+  const darkClass = css.slice(css.indexOf(".dark {"));
   for (const token of SEMANTIC_TOKENS) {
     assert.ok(lightBlock.includes(`--${token}:`), `浅色块缺 --${token}`);
-    assert.ok(darkBlock.includes(`--${token}:`), `深色块缺 --${token}`);
+    assert.ok(darkMedia.includes(`--${token}:`), `深色媒体查询块缺 --${token}`);
+    assert.ok(darkClass.includes(`--${token}:`), `深色 class 块缺 --${token}`);
   }
 });
 

@@ -123,6 +123,8 @@ export const SEMANTIC_TOKENS = [
   "primary",
   "primary-hover",
   "primary-text",
+  "primary-subtle",
+  "primary-border",
   "on-primary",
   "secondary",
   "on-secondary",
